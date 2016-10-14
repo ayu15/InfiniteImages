@@ -1,5 +1,8 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ViewChild} from "@angular/core/src/metadata/di";
+import { Inject } from "@angular/core";
+import { HostListener} from "@angular/core";
+import { DOCUMENT } from "@angular/platform-browser";
 //http://i884.photobucket.com/albums/ac42/DanasANIMElove/Other/2010-04-02134640.jpg
 
 @Component({
@@ -9,47 +12,51 @@ import {ViewChild} from "@angular/core/src/metadata/di";
 })
 export class ImagesContainerComponent implements OnInit, AfterViewInit {
   @ViewChild('infinteList') infiniteList: any;
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    let scrollTop = this.document.body.scrollTop;
+    let scrollHeight = this.document.body.scrollHeight;
+    if (scrollTop + 800 >= scrollHeight) {
+      console.log("scroll top", scrollTop);
+      console.log("scroll height", scrollHeight);
+      this.loadMore();
+    }
+  }
 
-  constructor() {
+  private listElm:any;
+  constructor(@Inject(DOCUMENT) private document: Document) {
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.detectBottom();
+    this.listElm = this.infiniteList.nativeElement;
+    this.loadMore();
   }
 
-
-  private detectBottom() {
-    let listElm = this.infiniteList.nativeElement;
+  private loadMore(){
     let nextItem = 1;
-    function loadMore() {
-      // for (var i = 0; i < 10; i++) {
-      //   let item = document.createElement('li');
-      //   item.innerText = 'Item ' + nextItem++;
-      //   listElm.appendChild(item);
-      // }
-      for (var i = 0; i < 10; i++) {
-        if(nextItem==11){
-          nextItem =1;
-        }
-        let item = document.createElement('img');
-        item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + nextItem++ + '.jpg';
-        item.className = "myImages";
-        item.setAttribute('style', "width:40%; margin: 5%");
-        listElm.appendChild(item);
+    for (var i = 0; i < 10; i++) {
+      if(nextItem==11){
+        nextItem =1;
       }
-    };
-
-    loadMore();
-    listElm.addEventListener('scroll', function () {
-      if (listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
-        loadMore();
-      }
-    });
+      let item = document.createElement('img');
+      item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + nextItem++ + '.jpg';
+      item.className = "myImages";
+      item.setAttribute('style', "width:40%; margin:5%");
+      this.listElm.appendChild(item);
+    }
   }
-
+  private detectBottom() {
+    //
+    // if (this.listElm.scrollTop + this.listElm.clientHeight >= this.listElm.scrollHeight) {
+    //   console.log("scrollTop", this.listElm.scrollTop);
+    //   console.log("clientHeight", this.listElm.clientHeight);
+    //   console.log("scrollHeight", this.listElm.scrollHeight);
+    //
+    // }
+  };
 
 }
 
