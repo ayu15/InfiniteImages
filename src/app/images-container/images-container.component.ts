@@ -35,10 +35,9 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
           nextItem =1;
         }
         let item = document.createElement('img');
-        //item.setAttribute('src', 'http://lorempixel.com/50/50/animals/');
         item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + nextItem++ + '.jpg';
         item.className = "myImages";
-        item.style = "width:40%; margin: 5%";
+        item.setAttribute('style', "width:40%; margin: 5%");
         listElm.appendChild(item);
       }
     };
