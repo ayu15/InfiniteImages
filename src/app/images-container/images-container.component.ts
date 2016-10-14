@@ -15,8 +15,9 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
   onWindowScroll() {
     let scrollTop = this.document.body.scrollTop;
     let scrollHeight = this.document.body.scrollHeight;
-    if (scrollTop + 800 >= scrollHeight) {
+    if (scrollTop + 780 >= scrollHeight) {
       this.loadMore();
+      this.removeOld();
     }
   }
 
@@ -32,6 +33,14 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.listElm = this.infiniteList.nativeElement;
     this.loadMore();
+    this.loadMore();
+
+  }
+
+  private removeOld(){
+    for (let i = 0; i < 4; i++) {
+      this.listElm.removeChild(this.listElm.childNodes[i]);
+    }
   }
 
   private loadMore(){
@@ -40,7 +49,7 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
         this.nextItem =1;
       }
       let item = document.createElement('img');
-      item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + this.nextItem++ + '.jpg';
+      item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + this.nextItem++ + '.jpg?' +Date.now();
       item.className = "myImages";
       item.setAttribute('style', "width:40%; margin:5%");
       this.listElm.appendChild(item);
