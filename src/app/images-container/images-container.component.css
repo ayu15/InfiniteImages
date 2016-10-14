@@ -18,3 +18,8 @@ li {
 li:hover {
     background: #ccc;
 }
+
+.myImages{
+    width:20%;
+    margin:2.5%;
+}
