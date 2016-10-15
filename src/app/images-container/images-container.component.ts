@@ -14,8 +14,10 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
   @HostListener("window:scroll", [])
   onWindowScroll() {
     let scrollTop = this.document.body.scrollTop;
+    let clientHeight = window.screen.availHeight;
     let scrollHeight = this.document.body.scrollHeight;
-    if (scrollTop + 780 >= scrollHeight) {
+
+    if (scrollTop + clientHeight >= scrollHeight) {
       this.loadMore();
       this.removeOld();
     }
