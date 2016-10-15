@@ -51,7 +51,7 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
         this.nextItem =1;
       }
       let item = document.createElement('img');
-      item.src = 'https://raw.githubusercontent.com/ayu15/InfiniteImages/master/src/assets/images/img' + this.nextItem++ + '.jpg?' +Date.now();
+      item.src = 'https://rawgit.com/ayu15/InfiniteImages/master/src/assets/images/img' + this.nextItem++ + '.jpg?' +Date.now();
       item.className = "myImages";
       item.setAttribute('style', "width:40%; margin:5%");
       this.listElm.appendChild(item);
