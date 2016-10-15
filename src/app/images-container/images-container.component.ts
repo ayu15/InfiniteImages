@@ -4,6 +4,7 @@ import { Inject } from "@angular/core";
 import { HostListener} from "@angular/core";
 import { DOCUMENT } from "@angular/platform-browser";
 
+
 @Component({
   selector: 'app-images-container',
   templateUrl: './images-container.component.html',
@@ -19,7 +20,7 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
 
     if (scrollTop + clientHeight >= scrollHeight) {
       this.loadMore();
-      this.removeOld();
+      this.lazyLoad();
     }
   }
 
@@ -39,25 +40,70 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
 
   }
 
-  private removeOld(){
-    for (let i = 0; i < 4; i++) {
-      this.listElm.removeChild(this.listElm.childNodes[i]);
-    }
-  }
-
   private loadMore(){
     for (let i = 0; i < 4; i++) {
       if(this.nextItem==11){
         this.nextItem =1;
       }
       let item = document.createElement('img');
-      item.src = 'https://rawgit.com/ayu15/InfiniteImages/master/src/assets/images/img' + this.nextItem++ + '.jpg?' +Date.now();
+      item.setAttribute('data-src', 'assets/images/img' + this.nextItem++ + '.jpg?' +Date.now());
+      item.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       item.className = "myImages";
       item.setAttribute('style', "width:40%; margin:5%");
       this.listElm.appendChild(item);
+      if(this.nextItem==1){
+        console.log("img", item);
+      }
     }
+    this.setLazy();
+    this.lazyLoad();
   }
 
+  private lazy: any= [];
 
+  private setLazy(){
+  this.lazy = document.getElementsByClassName('myImages');
+}
+
+  private lazyLoad(){
+  for(var i=0; i<this.lazy.length; i++){
+    if(this.isInViewport(this.lazy[i])){
+      if (this.lazy[i].getAttribute('data-src')){
+        this.lazy[i].src =
+          this.lazy[i].getAttribute('data-src');
+
+        // remove the attribute
+        this.lazy[i].removeAttribute('data-src');
+      }
+    }
+  }
+  this.cleanLazy();
+}
+
+  private cleanLazy(){
+  this.lazy =
+    Array.prototype.filter.call(
+      this.lazy,
+      function(l){
+        return l.getAttribute('data-src');
+      }
+    );
+}
+
+  private isInViewport(el){
+  var rect = el.getBoundingClientRect();
+    return (
+    rect.bottom >= 0 &&
+    rect.right >= 0 &&
+
+    rect.top <= (
+    window.innerHeight ||
+    document.documentElement.clientHeight) &&
+
+    rect.left <= (
+    window.innerWidth ||
+    document.documentElement.clientWidth)
+  );
+}
 }
 
