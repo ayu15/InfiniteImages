@@ -18,7 +18,7 @@ export class ImagesContainerComponent implements OnInit, AfterViewInit {
     let clientHeight = window.screen.availHeight;
     let scrollHeight = this.document.body.scrollHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight) {
+    if (scrollTop + clientHeight + 300 >= scrollHeight) {
       this.loadMore();
       this.lazyLoad();
     }
